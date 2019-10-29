@@ -1,38 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
+import RestartButton from './components/RestartButton'
 
-const StyledImage = styled.img`
-  width: 10%;
-  height: 10%;
-`
 const Container = styled.div`
   margin: 10%;
   text-align: center;
   border: 0.1px solid grey;
 `
-const ImageDiv = styled.div`
-  margin-top: 2%
-`
-const Won = styled.img`
-  width: 30%;
-  height: 30%;
-`
 const StyledButton = styled.button`
   display: inline-block;
   color: palevioletred;
-  font-size: 1.1em;
+  font-size: 1.2em;
   padding: 0.25em 1em;
   border: 2px solid palevioletred;
   border-radius: 3px;
 `
 const StyledInput = styled.input`
-  padding: 0.5em;
+  padding: 0.25em 1em;
   margin: 0.5em;
   color: palevioletred;
   background: white;
   border: 2px solid palevioletred;
   border-radius: 3px;
-  font-size: 1em
+  font-size: 1.2em
 `
 const Title = styled.h1`
   font-size: 2em;
@@ -43,60 +33,58 @@ const Text = styled.p`
 `
 
 function App() {
-  const [numberToBeGuessed] = React.useState(Math.round(Math.random()*10000));
+  const [numberToBeGuessed, setNumberToBeGuessed] = React.useState(Math.floor(1000 + Math.random() * 9000));
   console.log(numberToBeGuessed)
-  const [userGuessedNumber, setUserGuessedNumber] = React.useState([])
+
+  const [guessHistory, setGuessHistory] = React.useState([])
+
+  const convertInputToGuess = (numberString) => {
+    const answerArray = numberToBeGuessed.toString().split('');
+    const answerGuessed = numberString.toString().split('');
+    let numOfCows = 0;
+    let numOfBulls = 0;
+  
+    for(let i=0; i<4; i++) {
+      if(answerGuessed.includes(answerArray[i])){
+        if(answerArray[i] === answerGuessed[i]) {
+          numOfBulls = numOfBulls + 1;
+        } else {
+          numOfCows = numOfCows + 1
+        }
+      }
+    }
+    return { guess: numberString, bulls: numOfBulls, cows: numOfCows }
+  }
+  
   const [typedInput, setTypedInput] = React.useState('')
 
   return (
     <Container>
       <Title>Play Bull and Cows</Title>
-      {/* <p>Number to be guessed: {numberToBeGuessed}</p> */}
-      <Text>Your choice: {userGuessedNumber}</Text>
+      {
+        guessHistory.map(({ guess, cows, bulls }, index) => (
+          <Text key={index}>{guess}: {cows} Cows, {bulls} Bulls</Text>
+        ))
+      }
+
       <StyledInput onChange={event => setTypedInput(event.target.value)} />
-      <StyledButton 
-        onClick={() =>  {setUserGuessedNumber(typedInput)}}
+      <StyledButton onClick={() => {
+        if (guessHistory.length < 3) {
+          const guessObject = convertInputToGuess(typedInput)
+          setGuessHistory([...guessHistory, guessObject])
+        }
+      }}
+
       >Submit your Answer
       </StyledButton>
-      <Result answer={numberToBeGuessed} guess={userGuessedNumber} />
-      {/* {userGuessedNumber === numberToBeGuessed && <p>You won</p>} */}
+      <RestartButton 
+        guessHistory={guessHistory} 
+        setGuessHistory={setGuessHistory} 
+        setNumberToBeGuessed={setNumberToBeGuessed} />
     </ Container>
   );
 }
 
-function Result({ answer, guess }) {
-  const answerArray = answer.toString().split('');
-  const answerGuessed = guess.toString().split('');
-  let cows = 0;
-  let bulls = 0;
-
-  for(let i=0; i<4; i++) {
-    if(answerGuessed.includes(answerArray[i])){
-      if(answerArray[i] === answerGuessed[i]) {
-        bulls = bulls + 1;
-      } else {
-        cows = cows + 1
-      }
-    }
-  }
-  if(bulls === 4) {
-    return(
-      <ImageDiv>
-      <Won src = "http://halopublishing.com/blog/wp-content/uploads/2015/05/winner.jpg" />
-      </ImageDiv>
-    )
-  } else {
-    return (
-      <>
-      <Text>{bulls} bulls and</Text> 
-      <StyledImage src="https://i.dlpng.com/static/png/1177844-charging-bull-cattle-clip-art-bull-png-transparent-images-cow-and-bull-png-900_520_preview.png" />
-      <Text>{cows} cows</Text>
-      <StyledImage src="https://www.fourjay.org/myphoto/f/45/453681_cows-png.jpg" />
-      <h1>Try Again!</h1>
-      </>
-    )
-  }
-}
 
 export default App;
 
