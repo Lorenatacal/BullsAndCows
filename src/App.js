@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import Result from './components/Result'
 
 const StyledImage = styled.img`
   width: 10%;
@@ -42,61 +43,47 @@ const Text = styled.p`
   font-size: 1.3em;
 `
 
-function App() {
-  const [numberToBeGuessed] = React.useState(Math.round(Math.random()*10000));
-  console.log(numberToBeGuessed)
-  const [userGuessedNumber, setUserGuessedNumber] = React.useState([])
-  const [typedInput, setTypedInput] = React.useState('')
+/*
+  [
+    { guess: 7201, cows: 2, bulls: 1 },
+    { guess: 8303, cows: 0, bulls: 2 }
+  ]
 
+*/
+
+function App() {
+  const [numberToBeGuessed] = React.useState(Math.floor(1000 + Math.random() * 9000));
+  console.log(numberToBeGuessed)
+  const [userGuessedNumber, setUserGuessedNumber] = React.useState('')
+  const [typedInput, setTypedInput] = React.useState('')
+  const [userInputHistory, setUserInputHistory] = React.useState([])
+  const [listOfAttempt, setListOfAttempt] = React.useState([])
+  // const listOfAttempt = setUserInputHistory(1234)
+
+ const onClick = (event) => {
+    const setUserGuessedNumber = [...userGuessedNumber, typedInput]
+    setListOfAttempt([...listOfAttempt, setUserGuessedNumber])
+    console.log(setUserGuessedNumber, "setUser", setListOfAttempt, "setAttept")
+ }
+  
   return (
     <Container>
       <Title>Play Bull and Cows</Title>
       {/* <p>Number to be guessed: {numberToBeGuessed}</p> */}
       <Text>Your choice: {userGuessedNumber}</Text>
       <StyledInput onChange={event => setTypedInput(event.target.value)} />
-      <StyledButton 
-        onClick={() =>  {setUserGuessedNumber(typedInput)}}
+      <StyledButton onClick={onClick}
+        // onClick={() =>  {setUserGuessedNumber(typedInput)}}
+
       >Submit your Answer
       </StyledButton>
+      <ul>{listOfAttempt}</ul>
       <Result answer={numberToBeGuessed} guess={userGuessedNumber} />
       {/* {userGuessedNumber === numberToBeGuessed && <p>You won</p>} */}
     </ Container>
   );
 }
 
-function Result({ answer, guess }) {
-  const answerArray = answer.toString().split('');
-  const answerGuessed = guess.toString().split('');
-  let cows = 0;
-  let bulls = 0;
-
-  for(let i=0; i<4; i++) {
-    if(answerGuessed.includes(answerArray[i])){
-      if(answerArray[i] === answerGuessed[i]) {
-        bulls = bulls + 1;
-      } else {
-        cows = cows + 1
-      }
-    }
-  }
-  if(bulls === 4) {
-    return(
-      <ImageDiv>
-      <Won src = "http://halopublishing.com/blog/wp-content/uploads/2015/05/winner.jpg" />
-      </ImageDiv>
-    )
-  } else {
-    return (
-      <>
-      <Text>{bulls} bulls and</Text> 
-      <StyledImage src="https://i.dlpng.com/static/png/1177844-charging-bull-cattle-clip-art-bull-png-transparent-images-cow-and-bull-png-900_520_preview.png" />
-      <Text>{cows} cows</Text>
-      <StyledImage src="https://www.fourjay.org/myphoto/f/45/453681_cows-png.jpg" />
-      <h1>Try Again!</h1>
-      </>
-    )
-  }
-}
 
 export default App;
 
