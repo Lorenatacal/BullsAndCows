@@ -11,13 +11,16 @@ const StyledButton = styled.button`
     margin-left: 1%;
 `
 
-function RestartButton({ setGuessHistory, guessHistory, setNumberToBeGuessed}) {
+function RestartButton({ setGuessHistory, guessHistory, setNumberToBeGuessed, numberToBeGuessed }) {
     if (guessHistory.length === 3) {
         return(
-            <StyledButton onClick={() => {
-                setGuessHistory([]);
-                setNumberToBeGuessed(Math.floor(1000 + Math.random() * 9000))
-            }}>Restart</StyledButton>
+            <>
+            <h3>You Lost! The number was: {numberToBeGuessed}</h3>
+                <StyledButton onClick={() => {
+                    setGuessHistory([]);
+                    setNumberToBeGuessed(Math.floor(1000 + Math.random() * 9000));
+                }}>Restart</StyledButton>
+            </>
         )
     } else {
         return null

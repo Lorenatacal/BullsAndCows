@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import RestartButton from './components/RestartButton'
+import RestartButton from './components/RestartButton';
+
 
 const Container = styled.div`
   margin: 10%;
@@ -53,6 +54,9 @@ function App() {
         }
       }
     }
+    if(numOfBulls === 4) {
+      return "You Won!"
+    }
     return { guess: numberString, bulls: numOfBulls, cows: numOfCows }
   }
   
@@ -61,9 +65,11 @@ function App() {
   return (
     <Container>
       <Title>Play Bull and Cows</Title>
+      <p>Computer has picked a number, it's time to make your guesses</p>
       {
         guessHistory.map(({ guess, cows, bulls }, index) => (
-          <Text key={index}>{guess}: {cows} Cows, {bulls} Bulls</Text>
+          <Text key={index}>{guess}: {cows} Cows, {bulls} Bulls </Text>
+          
         ))
       }
 
@@ -73,14 +79,16 @@ function App() {
           const guessObject = convertInputToGuess(typedInput)
           setGuessHistory([...guessHistory, guessObject])
         }
-      }}
+      }
+    }
 
       >Submit your Answer
       </StyledButton>
       <RestartButton 
         guessHistory={guessHistory} 
         setGuessHistory={setGuessHistory} 
-        setNumberToBeGuessed={setNumberToBeGuessed} />
+        setNumberToBeGuessed={setNumberToBeGuessed}
+        numberToBeGuessed={numberToBeGuessed}/>
     </ Container>
   );
 }
