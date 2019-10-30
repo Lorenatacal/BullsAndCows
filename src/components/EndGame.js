@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import styled from 'styled-components';
 
 const StyledImage = styled.img`
@@ -15,21 +15,21 @@ const StyledButton = styled.button`
     margin-left: 1%;
 `
 
-function RestartButton({ setGuessHistory, guessHistory, setNumberToBeGuessed, numberToBeGuessed, setTypedInput }) {
-    if (guessHistory.length === 3) {
-        return(
+function EndGame({ setGuessHistory, guessHistory, setNumberToBeGuessed, numberToBeGuessed, setTypedInput }) {
+    for(let i=0; i<guessHistory.length; i++) {
+      if(guessHistory[i].bulls === 4){
+        return (
             <>
-                <StyledButton onClick={() => {
+            <StyledButton onClick={() => {
                     setGuessHistory([]);
                     setNumberToBeGuessed(Math.floor(1000 + Math.random() * 9000));
                 }}>Restart</StyledButton>
-                <StyledImage src="https://www.clipartwiki.com/clipimg/full/243-2435844_over-by-mohanmadabd-logo-game-over-png.png" alt="You Lost!"/>
-                <h3>The number was: {numberToBeGuessed}</h3>
+            <StyledImage src="http://halopublishing.com/blog/wp-content/uploads/2015/05/winner.jpg" />
             </>
         )
-    } else {
-        return null
+      }
     }
-}
+    return null
+  }
 
-export default RestartButton;
+  export default EndGame;

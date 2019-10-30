@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import RestartButton from './components/RestartButton';
+import EndGame from './components/EndGame'
 
 
 const Container = styled.div`
@@ -54,9 +55,6 @@ function App() {
         }
       }
     }
-    if(numOfBulls === 4) {
-      return "You Won!"
-    }
     return { guess: numberString, bulls: numOfBulls, cows: numOfCows }
   }
   
@@ -78,17 +76,23 @@ function App() {
         if (guessHistory.length < 3) {
           const guessObject = convertInputToGuess(typedInput)
           setGuessHistory([...guessHistory, guessObject])
-        }
+        } 
       }
     }
-
       >Submit your Answer
       </StyledButton>
       <RestartButton 
         guessHistory={guessHistory} 
         setGuessHistory={setGuessHistory} 
         setNumberToBeGuessed={setNumberToBeGuessed}
-        numberToBeGuessed={numberToBeGuessed}/>
+        numberToBeGuessed={numberToBeGuessed}
+        setTypedInput={setTypedInput}/>
+        <EndGame 
+        guessHistory={guessHistory} 
+        setGuessHistory={setGuessHistory} 
+        setNumberToBeGuessed={setNumberToBeGuessed}
+        numberToBeGuessed={numberToBeGuessed}
+        setTypedInput={setTypedInput}/>
     </ Container>
   );
 }
